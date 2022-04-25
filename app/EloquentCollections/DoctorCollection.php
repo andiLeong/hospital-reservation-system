@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Collection;
 class DoctorCollection extends Collection
 {
 
+    public function worksOn($date)
+    {
+        return $this->filter(fn($doctor) => $doctor->schedules->contains($date));
+    }
+
     public function applySchedule()
     {
         $this->map(function ($doctor) {

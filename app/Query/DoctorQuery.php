@@ -8,7 +8,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 class DoctorQuery
 {
 
-    public function __invoke($weeks)
+    public function __invoke()
     {
         return Doctor::query()
             ->with(['shifts' => fn($query) => $query->NextSevenDays(), 'availableSlots:doctor_id,remain,date'])

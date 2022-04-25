@@ -14,13 +14,11 @@ class ShiftController extends Controller
     public function index(DoctorQuery $query)
     {
         $weeks = Collection::week()->map(fn($date) => $date->format('Y-m-d'));
-        $doctors = $query($weeks)->applySchedule();
+        $doctors = $query()->applySchedule();
 
         return $weeks->map(fn($date) => [
             'date' => $date,
-            'doctors' => $doctors->filter(fn($doctor) => $doctor->schedules->contains($date))
-                ->values()
-                ->applyCharge($date)
+            'doctors' => $doctors->worksOn($date)->values()->applyCharge($date)
         ]);
     }
 
