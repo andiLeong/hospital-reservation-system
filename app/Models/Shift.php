@@ -11,6 +11,8 @@ class Shift extends Model
     use HasFactory;
     use DoctorScope;
 
+//    protected $appends = ['somethingFromDoctor'];
+
     public static function slotsCount(Doctor $doctor,$date)
     {
         return self::doctorId($doctor->id)->date($date)->pluck('slots_limit')->sum();

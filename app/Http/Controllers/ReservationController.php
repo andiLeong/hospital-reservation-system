@@ -7,7 +7,6 @@ use App\Models\Reservation;
 use App\Rules\ValidateTimeFrame;
 use App\ValueObject\Patient;
 use App\ValueObject\TimeFrame;
-use Exception;
 
 class ReservationController extends Controller
 {
@@ -19,16 +18,12 @@ class ReservationController extends Controller
             'at' => ['required', new ValidateTimeFrame()],
         ]);
 
-        try {
-            $reservation->make(
-                $doctor,
-                Patient::init(auth()->user()),
-                $data['on'],
-                TimeFrame::make($data['at']),
-            );
-        } catch (Exception $e) {
-            abort(422, $e->getMessage());
-        }
+        $reservation->make(
+            $doctor,
+            Patient::init(auth()->user()),
+            $data['on'],
+            TimeFrame::make($data['at']),
+        );
 
         return ['status' => 'ok'];
     }

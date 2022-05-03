@@ -53,6 +53,12 @@ class Doctor extends Model
         return $this->shifts->pluck('date')->unique()->values();
     }
 
+
+    public function getShiftOn($date,$type,callable $fn)
+    {
+        return $this->shifts()->date($date)->type($type)->firstOr($fn);
+    }
+
     public function workOn($date, $shifts = null)
     {
         if (is_null($shifts)) {
@@ -66,7 +72,7 @@ class Doctor extends Model
         return !$this->workOn($date, $shifts);
     }
 
-    public function getShiftOn($date)
+    public function getShiftTypeOn($date)
     {
         $type = $this->shifts->where('date',$date)->values()->pluck('type');
         return $type->count() == 1

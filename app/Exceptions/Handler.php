@@ -37,5 +37,13 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (DoctorNotWorkOnThisDateException $e, $request) {
+            return response($e->getMessage(),422);
+        });
+
+        $this->renderable(function (SlotIsFullyReservedException $e, $request) {
+            return response($e->getMessage(),422);
+        });
     }
 }

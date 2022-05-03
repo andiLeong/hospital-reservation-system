@@ -17,14 +17,15 @@ class Reservation extends Model
 
     public function make(Doctor $doctor, Patient $patient,$date,TimeFrame $time): bool
     {
-        $type = $time->getShift();
-        $shift = Shift::doctorId($doctor->id)->type($type)->date($date)->firstOr(fn() =>
+        $shift = $doctor->getShiftOn($date, $time->getShift(),fn() =>
             throw new DoctorNotWorkOnThisDateException('doctor does not work on ' . $date)
         );
 
         if($this->fullyReservedFor($doctor,$date,$time)){
             throw new SlotIsFullyReservedException("Doctor is fully reserved on {$date} at {$time}");
         }
+
+        //todo a same user can not reserve the same doctor same date time
 
         self::create([
             'on' => $date,
@@ -53,5 +54,10 @@ class Reservation extends Model
     {
         $count = self::where('doctor_id',$doctor->id)->on($date)->at($time)->count();
         return $count >= $doctor->slot_per_time_frame;
+    }
+
+    public function reserveOnSameDateTime()
+    {
+       //todo check user reserve the same date time already with the same doctor
     }
 }

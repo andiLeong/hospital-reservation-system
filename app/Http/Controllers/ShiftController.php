@@ -32,7 +32,7 @@ class ShiftController extends Controller
         $date = $data['date'];
 
         $doctor->charge = $doctor->getFee($date);
-        $timeFrames = $timesCollection->get($doctor->getShiftOn($date));
+        $timeFrames = $timesCollection->get($doctor->getShiftTypeOn($date));
 
         $reservations = Reservation::doctorId($doctor->id)->on($date)->get();
 
